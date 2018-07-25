@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html>
+
+<html lang="en">
+<head>
+  <title>Search Result</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <style>
+    .blank_row
+        {
+            height: 5% !important; /* overwrites any other rules */
+
+            background-color: #d3e4ff;
+        }
+    .head_row
+        {
+            background-color: #a3c6ff;
+        }
+    .slot_row
+        {
+            background-color: #CCFFCC;
+        }
+    .space_before_slots
+        {
+            background-color: white;
+        }
+        .table{
+            margin: 10px 20px 10px 10px;
+        }
+  </style>
+
+</head>
+
+<body>
+<nav class="navbar navbar-inverse" style="font-size: 20px;">
+<div class="container-fluid">
+<ul  class="nav navbar-nav" style="margin-bottom: 0px;">
+<li style="padding-right: 15px"  ><a href="{% url 'main' %}">Home</a></li>
+<li style="padding-right: 15px" > <a href="{% url 'search' %}">Search</a></li>
+<li style="padding-right: 15px"><a href="{% url 'add_options' %}">Add New Data</a></li>
+<li style="padding-right: 15px" class="active"><a href="{% url 'delete' %}">Delete Data</a></li>
+<li style="padding-right: 15px"><a href="{% url 'report_options' %}">Report Generation</a></li>
+</ul>
+<ul class="nav navbar-nav navbar-right">
+<li><a href="{% url 'logout' %}"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+
+</ul>
+</div>
+</nav>
+
+{% if search_results %}
+
+
+
+
+    <table class="table table-hover">
+
+     <thead class ="head_row">
+        <th> Delete Options</th>
+
+
+        <th> Date </th>
+        <th> Breakdown
+        </th>
+        <th> Cumulative Breakdown of this month
+
+        </th>
+
+            <th> Delete ?</th>
+            <th> Shift  </th>
+            <th> HMC </th>
+            <th> Diesel Start %  </th>
+            <th> Diesel End % </th>
+            <th> Dissel Start Hour  </th>
+            <th> Diesel End Hour  </th>
+            <th> Tonnage/Boxes  </th>
+            <th> Cycles   </th>
+
+            <th> Total Idle Time
+            </th>
+            <th> EWT
+            </th>
+            <th> Tonnage/Boxes Per Hour
+            </th>
+            <th> Cycles Per Hour </th>
+
+                <th>Delete ?</th>
+                <th> Time of Start </th>
+                <th> Time of stop </th>
+                <th> Reason </th>
+                <th> Remark  </th>
+                <th> Total Time </th>
+
+                    <th> Vessel Name </th>
+                    <th> Vessel Cargo</th>
+                    <th> Berth </th>
+
+
+        </thead>
+
+<script>
+    funct
+</script>
+
+
+<tbody>
+
+
+   <script>
+        var check_date;
+        var check_others;
+        var key = 1;
+    </script>
+
+    {% for shift in search_results %}
+
+    <script>
+        var date = "<th><button><a href='date/{{ shift.date.id }}'>Delete Date</a></button></th><th>{{ shift.date.date }} </th>";
+        if (date == check_date){
+            key = 0;
+            document.write("<td></td><td></td>")
+        }
+        else{
+            check_date = date;
+            // document.write("<td></td><td></td>");
+            document.write(date);
+        }
+
+    </script>
+    <script>
+        var a;
+        if( {{ shift.hmc_number }} == 1) {
+            a = {{ shift.date.BD_1 }};
+        }
+        else {
+            a = {{shift.date.BD_2}};
+        }
+        a *= 100;
+        a = Math.round(a);
+        a /= 100;
+
+    </script>
+            <script>
+                if (key==0){
+                    document.write("<td></td><td></td>");
+                }
+                else{
+                    a ="<td>"+a+" </td>";
+                    document.write(a);
+                }
+        // document.write("<td></td><td>Breakdown_data</td>")
+            </script>
+        <script>
+            var a;
+            if( {{ shift.hmc_number }} == 1) {
+                 a = {{ shift.date.cumulative_breakdown_monthwise_1 }};
+            }
+            else {
+                a = {{ shift.date.cumulative_breakdown_monthwise_2 }};
+            }
+            a *= 100;
+            a = Math.round(a);
+            a /= 100;
+
+        </script>
+            <script>
+                if (key==0){
+                    key = 1;
+                }
+                else{
+                    a ="<td>"+a+" </td>";
+                    document.write(a);
+
+                }
+            // document.write("<td>Cumulative Breakdown</td>")
+            </script>
+
+        </td>
+
+            <td><button><a href = "shift/{{shift.id}}">Delete Shift</a></button></td>
+
+            <td> {{ shift.shift }} </td>
+            <td>  {{shift.hmc_number}} </td>
+            <td>  {{ shift.diesel_start_percentage }} </td>
+            <td>  {{ shift.diesel_end_percentage }} </td>
+            <td>  {{ shift.diesel_start_hours }} </td>
+            <td>  {{ shift.diesel_end_hours }} </td>
+            <td>  {{ shift.total_tonnage_or_boxes }} </td>
+            <td> {{ shift.cycles }} </td>
+            <td>
+                <script>
+                    var a ={{ shift.total_idle_time }};
+                    a *= 100;
+                    a = Math.round(a);
+                    a /= 100;
+                    document.write(a);
+                    // document.write("Total Idle Time ")
+                </script>
+            </td>
+            <td>
+                <script>
+                    var a = {{ shift.ewt }};
+                    a *= 100;
+                    a = Math.round(a);
+                    a /= 100;
+                    document.write(a);
+                    // document.write("EWT ")
+                </script>
+            </td>
+            <td>
+                <script>
+                    var a ={{ shift.tonnage_per_hour }};
+                    a *= 100;
+                    a = Math.round(a);
+                    a /= 100;
+                    document.write(a);
+                    // document.write("Total Tonnage or Boxes Per Hours")
+                </script>
+            </td>
+            <td>
+                <script>
+                    var a ={{ shift.cycles_per_hour }};
+                    a *= 100;
+                    a = Math.round(a);
+                    a /= 100;
+                    document.write(a);
+                    // document.write("Cycles Per Hours")
+                </script></td>
+            {% for slot in shift.slot_set.all %}
+            <tr class="slot_row">
+
+                <td colspan="17" class = "space_before_slots"></td>
+                <td><button><a href = "slot/{{slot.id}}">Delete Slot</a></button></td>
+                <td>  {{ slot.get_time_slot_start }} </td>
+                <td>  {{ slot.get_time_slot_stop }} </td>
+                <td>  {{ slot.reason }} </td>
+                <td> {{ slot.remark }} </td>
+                <td>
+                    <script>
+                        var a ={{ slot.total_time }};
+                        a *= 100;
+                        a = Math.round(a);
+                        a /= 100;
+                        document.write(a);
+                        // document.write("Total Time ")
+                    </script></td>
+
+                {% for vessel in slot.vessel_set.all %}
+                    <td> {{ vessel.vessel_name }} </td>
+                    <td> {{ vessel.vessel_cargo }} </td>
+                    <td>  {{ vessel.berth_number }} </td>
+
+
+                {% endfor %}
+
+        {% endfor %}
+
+        </tr>
+        <tr class="blank_row">
+        <td colspan="26"></td>
+        </tr>
+    {% endfor %}
+
+    </tbody>
+    </table>
+{% else %}
+    <p> No data is available for given parameters. </p>
+{% endif %}
+
+
+
+</body>
+</html>

@@ -1,0 +1,157 @@
+<!DOCTYPE HTML>
+
+<html>
+
+{% load static %}
+
+    <head>
+
+<link rel="icon" href="{% static 'images/favicon.ico' %}">
+
+        <style>
+
+            .link {
+
+                display: grid;
+
+                font-size: 20px;
+
+                font-weight: bold;
+
+                background-color: #CCFFCC;
+
+                justify-content: center;
+
+                padding: 20px;
+
+            }
+
+
+
+
+
+            #container {
+
+                display: grid;
+
+                grid-template-rows: auto;
+
+                grid-gap: 30px;
+
+                margin: 25vh 0;
+
+
+
+            }
+
+
+
+        </style>
+
+        <meta charset="utf-8">
+
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+          <link rel="stylesheet" href="{% static "bootstrap.min.css" %}" >
+
+  <script src="{% static "jquery-3.3.1.js" %}"></script>
+
+  <script src="{% static "bootstrap.min.js" %}"></script>
+
+<style type="text/css">
+
+              body {
+
+                  background-color:  #66CCFF;
+
+              }
+
+              .navbar-inverse {
+
+                  margin-bottom: 0px;
+
+              }
+
+              h1 {
+
+                  color: black;
+
+                  font-style: bold;
+
+                  text-align: center;
+
+              }
+
+
+
+              .navbar-inverse .navbar-nav > li > a {
+
+                  color: #ddd;
+
+              }
+
+
+
+
+
+
+
+        </style>
+
+          </head>
+
+
+
+    </head>
+
+
+
+    <body>
+
+    <nav class="navbar navbar-inverse" style="font-size: 20px;">
+
+<div class="container-fluid">
+
+<ul  class="nav navbar-nav" style="margin-bottom: 0px; ">
+
+  <li style="padding-right: 15px"  ><a href="{% url 'main' %}">Home</a></li>
+
+   <li style="padding-right: 15px" > <a href="{% url 'search' %}">Search</a></li>
+
+    <li style="padding-right: 15px" class="active"><a href="{% url 'add_options' %}">Add New Data</a></li>
+
+    <li style="padding-right: 15px"><a href="{% url 'delete' %}">Delete Data</a></li>
+
+    <li style="padding-right: 15px"><a href="{% url 'report_options' %}">Report Generation</a></li>
+
+</ul>
+
+<ul class="nav navbar-nav navbar-right">
+
+  <li><a href="{% url 'logout' %}"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+
+
+
+</ul>
+
+</div>
+
+</nav>
+
+        <div id="container">
+
+            <a class="link" href="{% url 'add' %}"> Add a new entry </a>
+
+            <a class="link" href= "{%url 'add_slot_views' %}"> Add a slot to existing entry </a>
+
+            <a class="link" href="{% url 'add_shift_end' %}"> End Shift </a>
+
+        </div>
+
+
+
+    </body>
+
+
+
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html> {% load static %}
+
+
+<html>
+
+<head>
+<link rel="icon" href="{% static 'images/favicon.ico' %}">
+  <title>Message</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="{% static "bootstrap.min.css" %}" >
+  <script src="{% static "jquery-3.3.1.js" %}"></script>
+  <script src="{% static "bootstrap.min.js" %}"></script>
+        <style type="text/css">
+
+        .navbar-inverse {
+            margin-bottom: 0px;
+        }
+        .container-fluid{
+
+
+        }
+        h2 {
+            color: black;
+        }
+        body {
+        background-color: #66CCFF;
+      }
+
+  </style>
+
+</head>
+
+<body>
+<nav class="navbar navbar-inverse" style="height: 50px;font-size: 20px;">
+  <div class="container-fluid">
+    <ul  class="nav navbar-nav" style="margin-bottom: 0px; ">
+      <li style="padding-right: 15px" class="active" ><a href="{% url 'main' %}">Home</a></li>
+       <li style="padding-right: 15px"> <a href="{% url 'search' %}">Search</a></li>
+        <li style="padding-right: 15px"><a href="{% url 'add_options' %}">Add New Data</a></li>
+        <li style="padding-right: 15px"><a href="{% url 'modify_options' %}">Modify Data</a></li>
+        <li style="padding-right: 15px"><a href="{% url 'report_options' %}">Report Generation</a></li>
+    </ul>
+    <ul class="nav navbar-nav navbar-right">
+      <li><a href="{% url 'logout' %}"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+
+    </ul>
+  </div>
+</nav>
+
+<div class="container" style=" background-color:white ; margin-top: 50px;min-height: 100px;">
+	<h2 style = "text-align: center; margin-top: 35px;"> {{ message }} </h2>
+</div>
+
+
+</body>
+</html>

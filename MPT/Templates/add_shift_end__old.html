@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+
+    <head>
+        <link rel="icon" href="{% static 'images/favicon.ico' %}">
+        <style>
+            @media screen and (max-width: 700px) {
+                h1 {
+                    text-align: center;
+                    font-size: 7vw;
+                    font-family: Serif;
+                    padding-top: 15px;
+                }
+                #form {
+                    display: grid;
+                    grid-row-gap: 20px;
+                }
+                .row {
+                    display: grid;
+                    grid-template-rows: auto 30px;
+                    grid-row-gap: 2px;
+                }
+                .left {
+                    text-align: left;
+                    margin: 0 7vw;
+                }
+                .right {
+                    margin: 0 6vw;
+                    padding: 5px;
+                    border-radius: 8px;
+                    border-width: 0;
+                }
+                #form-container {
+                    margin: 10px;
+                }
+            }
+
+            @media screen and (min-width: 700px) {
+                h1 {
+                    font-size: 2.5em;
+                    text-align: center;
+
+                }
+                .row {
+                    display: grid;
+                    grid-template-columns: 5fr 7fr;
+                }
+                .left {
+                    grid-column: ;
+                    text-align: right;
+                    margin: 0 10px;
+                    align-content: center;
+                }
+                .right {
+                    grid-column: ;
+                    margin: 0 10vw 0 0;
+                    align-content: center;
+                    padding: 5px;
+                    border-radius: 7px;
+                    border-width: 0;
+                }
+                #form {
+                    display: grid;
+                    grid-template-rows: auto;
+                    grid-row-gap: 30px;
+
+                }
+                #form-container {
+                    margin: 0 20vw;
+                }
+            }
+
+            body {
+                background-color: lightblue;
+                margin: 0;
+            }
+
+            #form-container {
+                border-radius: 20px;
+                font-size: 16px;
+                font-weight: bold;
+                font-family: sans-serif;
+            }
+
+
+
+
+        </style>
+
+    </head>
+
+    <body>
+        <nav class="navbar navbar-inverse" style="font-size: 20px;">
+  <div class="container-fluid">
+    <ul  class="nav navbar-nav" style="margin-bottom: 0px; ">
+      <li style="padding-right: 15px"  ><a href="main/">Home</a></li>
+       <li style="padding-right: 15px" > <a href="{% url 'search' %}">Search</a></li>
+        <li style="padding-right: 15px"><a href="{% url 'add_options' %}">Add New Data</a></li>
+        <li style="padding-right: 15px" class="active"><a href="{% url 'delete' %}">Delete Data</a></li>
+        <li style="padding-right: 15px"><a href="{% url 'report_options' %}">Report Generation</a></li>
+    </ul>
+    <ul class="nav navbar-nav navbar-right">
+      <li><a href="{% url 'logout' %}"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+
+    </ul>
+  </div>
+</nav>
+        <h1>Add Shift End Data:  </h1>
+        <div id="form-container">
+
+            <form action="/main/add_shift_end/" method="post">
+                <div id="form">
+                    {% csrf_token %}
+                    <div class="row">
+                        <label class="left">Date : </label>
+                        <input class="right" name="date" id="date" type="date" placeholder="Date" required>
+                    </div>
+                    <div class="row">
+                        <label class="left">Shift : </label>
+                        <input class="right" name="shift" id="shift" type="number" min="1" max="3" placeholder="Shift" required>
+                    </div>
+                    <div class="row">
+                        <label class="left">Diesel Start Percentage : </label>
+                        <input class="right" name="diesel_start_percentage" id="diesel_start_percentage" type="number" step="0.01" min="0" max="100" placeholder="Diesel Start Percentage" required>
+                    </div>
+                    <div class="row">
+                        <label class="left">Diesel End Percentage : </label>
+                        <input class="right" name="diesel_end_percentage" id="diesel_end_percentage" type="number" step="0.01" min="0" max="100" placeholder="Diesel Start Percentage" required>
+                    </div>
+                    <div class="row">
+                        <label class="left">Diesel Start Hour : </label>
+                        <input class="right" name="diesel_start_hours" id="diesel_start_hours" type="number" step="0.01" min="0" placeholder="Diesel Start Percentage" required>
+                    </div>
+                    <div class="row">
+                        <label class="left">Diesel End Hour : </label>
+                        <input class="right" name="diesel_end_hours" id="diesel_end_hours" type="number" step="0.01" min="0" placeholder="Diesel Start Percentage" required>
+                    </div>
+                    <div class="row">
+                        <label class="left">Total Tonnage or Boxex : </label>
+                        <input class="right" name="total_tonnage_or_boxes" id="total_tonnage_or_boxes" type="number" min="0" step="1" placeholder="Total Tonnage or Boxes" required>
+                    </div>
+                    <div class="row">
+                        <label class="left">Cycles : </label>
+                        <input class="right" name="cycles" id="cycles" type="number" placeholder="cycles" required>
+                    </div>
+                </div>
+                <div id="cen">
+                    <input type="submit" value="Submit" id="submit-btn" />
+                </div>
+            </form>
+        </div>
+        <script>
+            function myFunction() {
+                var x = document.getElementById("topnav");
+                if (x.className === "topnav") {
+                    x.className += " responsive";
+                } else {
+                    x.className = "topnav";
+                }
+            }
+
+        </script>
+    </body>
+
+</html>

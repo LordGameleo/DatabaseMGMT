@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+{% load static %}
+<head>
+    <link rel="icon" href="{% static 'images/favicon.ico' %}">
+         <title>Add Data</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="{% static "bootstrap.min.css" %}" >
+  <script src="{% static "jquery-3.3.1.js" %}"></script>
+  <script src="{% static "bootstrap.min.js" %}"></script>
+
+  <style type="text/css">
+        body {
+            background-color:  #66CCFF;
+        }
+        .navbar-inverse {
+            margin-bottom: px;
+
+        }
+
+        h1 {
+            color: black;
+            font-style: bold;
+            text-align: center;
+        }
+
+        .navbar-inverse .navbar-nav > li > a {
+            color: #ddd;
+        }
+         .container1 {
+                    float: center;
+                    display: grid;
+                    grid-template-columns: 2fr 7fr 3fr 2fr;
+
+                    width: 100%;
+        }
+         .data_e {
+          background-color: #CCFFCC  ;         }
+          .data {
+            background-color: white;
+          }
+
+</style>
+</head>
+
+<body>
+
+<nav class="navbar navbar-inverse" style="font-size: 20px;">
+  <div class="container-fluid">
+    <ul  class="nav navbar-nav" style="margin-bottom: 0px; ">
+      <li style="padding-right: 15px"  ><a href="{% url 'main' %}">Home</a></li>
+       <li style="padding-right: 15px" > <a href="{% url 'search' %}">Search</a></li>
+        <li style="padding-right: 15px" class="active"><a href="{% url 'add_options' %}">Add New Data</a></li>
+        <li style="padding-right: 15px"><a href="{% url 'delete' %}">Delete Data</a></li>
+        <li style="padding-right: 15px"><a href="{% url 'report_options' %}">Report Generation</a></li>
+    </ul>
+    <ul class="nav navbar-nav navbar-right">
+      <li><a href="{% url 'logout' %}"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+
+    </ul>
+  </div>
+</nav>
+
+<h1 id="title">Add new data</h1>
+
+
+
+  <div class="container1">
+  <div></div>
+ <div class="data">
+ <form class="form-horizontal" action="/main/add/" , method="post">
+    <div id="form" style="padding: 50px;">
+     {% csrf_token %}
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="email">Date :</label>
+      <div class="col-sm-8">
+        <input type="date" class="form-control" id="date_search" placeholder="Date" name="date_search" >
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="control-label col-sm-2" >HMC Number :</label>
+      <div class="col-sm-8">
+        <input type="number" class="form-control" id="hmc_number" placeholder="HMC" name="hmc_number" min="1" max="2" required>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="control-label col-sm-2" >Shift :</label>
+      <div class="col-sm-8">
+        <input type="number" class="form-control" id="shift" placeholder="Shift" name="shift" min="1" max="3"  required>
+      </div>
+    </div>
+
+
+    <div class="form-group">
+      <label class="control-label col-sm-2" >Vessel Name :</label>
+      <div class="col-sm-8">
+        <input type="text" class="form-control" id="vessel_name" placeholder="Vessel Name" name="vessel_name"  required>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="control-label col-sm-2" >Cargo :</label>
+      <div class="col-sm-8">
+        <input type="text" class="form-control" id="vessel_cargo" placeholder="Cargo" name="vessel_cargo"  required>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="control-label col-sm-2" >Berth Number :</label>
+      <div class="col-sm-8">
+        <input type="number" class="form-control" id="berth_number" placeholder="Berth" name="berth_number"  required>
+      </div>
+    </div>
+
+  <div class="form-group">
+      <label class="control-label col-sm-2" > Slot Time Start :</label>
+      <div class="col-sm-8">
+        <input type="time" class="form-control" id="time_slot_start" placeholder="Slot Time Start" name="time_slot_start"  required>
+      </div>
+    </div>
+
+
+  <div class="form-group">
+      <label class="control-label col-sm-2" >Slot Time End :</label>
+      <div class="col-sm-8">
+        <input type="time" class="form-control" id="time_slot_stop" placeholder="Slot Time End " namSlot Time EndReason e="time_slot_stop"  required>
+      </div>
+    </div>
+
+
+  <div class="form-group">
+      <label class="control-label col-sm-2" > Reason :</label>
+      <div class="col-sm-8">
+        <input type="text" class="form-control" id="reason" placeholder="Reason" name="reason" size="4" pattern="[A-Z]{2,4}" required>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="control-label col-sm-2" > Remark :</label>
+      <div class="col-sm-8">
+        <input type="text" class="form-control" id="remark" placeholder="Remark" name="remark" style="height: 200%;" required>
+      </div>
+    </div>
+
+
+
+ <div class="form-group">
+      <div class="col-sm-offset-2 col-sm-8">
+        <button type="submit" class="btn btn-default">Submit</button>
+      </div>
+    </div>
+    </div>
+
+
+</form>
+
+</div>
+
+
+    <div class="data_e">
+   <p>Latest added data {% for date in dates %}<br> {{ date.date }} {% for shift in date.shift_set.all %} {% for slot in shift.slot_set.all %}<br> Time slot starts: {{ slot.time_slot_start }} <br> Time slot stops: {{ slot.time_slot_stop }} <br>
+    {% endfor %} {% endfor %} {% endfor %}
+    </p>
+  </div>
+<div></div>
+
+</body>
+</html>

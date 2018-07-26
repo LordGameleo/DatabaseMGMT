@@ -1,0 +1,1226 @@
+<!DOCTYPE html>
+<html>
+{% load static %}
+    <html lang="en">
+
+    <head>
+        <link rel="icon" href="{% static 'images/favicon.ico' %}">
+        <title>Search Result</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+     <link rel="stylesheet" href="{% static "bootstrap.min.css" %}" >
+     <script src="{% static "jquery-3.3.1.js" %}"></script>
+     <script src="{% static "bootstrap.min.js" %}"></script>
+      <script src="{% static "ajax.js" %}"></script>
+        <script type="text/javascript">
+        $(function(){
+            $('button').click(function() {
+                var url='data:application/vnd.ms-excel,' + encodeURIComponent($('#tableWrap').html())
+                location.href=url
+                return false
+            })
+        })
+        </script>
+
+        <style>
+            @media only screen and (max-width: 800px) {
+
+                #tableWrap {
+                    margin-top: 300px;
+                }
+            }
+            #invisible{
+                background-color: #eaf8ff;
+            }
+            .navbar-inverse {
+                margin-bottom: 0px;
+            }
+            .blank_row {
+                height: 5% !important;
+                /* overwrites any other rules */
+                background-color: #d3e4ff;
+            }
+
+            .head_row {
+                background-color: #66CCFF;
+            }
+
+            .slot_row {
+                background-color: #CCFFCC;
+            }
+
+            .space_before_slots {
+                background-color: white;
+            }
+
+            .table {
+                margin: 10px 00px 0px 00px;
+            }
+
+        </style>
+    </head>
+
+    <nav class="navbar navbar-inverse navbar-fixed-top" style="font-size: 20px;">
+  <div class="container-fluid">
+    <ul  class="nav navbar-nav" style="margin-bottom: 0px; ">
+      <li style="padding-right: 15px"><a href="{% url 'main' %}">Home</a></li>
+       <li style="padding-right: 15px" class="active" > <a href="{% url 'search' %}">Search</a></li>
+        <li style="padding-right: 15px"><a href="{% url 'add_options' %}">Add New Data</a></li>
+        <li style="padding-right: 15px"><a href="{% url 'modify_options' %}">Modify Data</a></li>
+        <li style="padding-right: 15px"><a href="{% url 'report_options' %}">Report Generation</a></li>
+    </ul>
+    <ul class="nav navbar-nav navbar-right">
+      <li><a href="{% url 'logout' %}"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+
+    </ul>
+  </div>
+</nav>
+
+
+    <body style="margin-top: 60px;" >
+        {% if search_results %}
+        <div id = "tableWrap">
+        <table class="table table-hover">
+
+            <thead class="head_row">
+
+                <th> Date </th>
+                <th> Breakdown </th>
+                <th> Cum. BD</th>
+                <th> Cum. % Availability</th>
+
+                <th> Shift </th>
+                <th> User </th>
+                <th> HMC </th>
+                <th> Diesel Start % </th>
+                <th> Diesel End % </th>
+                <th> Dissel Start Hour </th>
+                <th> Diesel End Hour </th>
+                <th> Tonnage / Boxes </th>
+                <th> Cycles </th>
+
+                <th> Total Idle Time</th>
+                <th> EWT</th>
+                <th> Tonnage / Boxes Per Hr</th>
+                <th> Cycles Per Hr </th>
+
+
+                <th> Time of Start </th>
+                <th> Time of stop </th>
+                <th> Reason </th>
+                <th> Remark </th>
+                <th> Total Time </th>
+
+                <th> Vessel Name </th>
+                <th> Cargo</th>
+
+                <th> H</th>
+                <th> S</th>
+                <th> NV</th>
+                <th> NB</th>
+                <th> NC</th>
+                <th> TR</th>
+                <th> FH</th>
+                <th> RH</th>
+                <th> NT</th>
+                <th> NO</th>
+                <th> MISC</th>
+                <th> M</th>
+                <th> Hrs Avail. for Day</th>
+                <th> Holiday and Off</th>
+                <th> Strike</th>
+                <th> Other</th>
+                <th> Total 3 to 5</th>
+                <th> Hrs Avail. for working</th>
+                <th> No Vessel</th>
+                <th> No Booking</th>
+                <th> No feeding of Cargo/ No labours</th>
+                <th> Others Port User Account</th>
+                <th> Total 8 to 11 </th>
+                <th> Actual Available Working Time</th>
+                <th> Breakdown Repairs</th>
+                <th> Maintenance</th>
+                <th> Total 13+14</th>
+                <th> HMC Availability Hours</th>
+                <th> Effective Working Hours of HMC</th>
+                <th> HMC Availability %</th>
+                <th> Operational utilization </th>
+                <th> Cumulative Available Hours</th>
+                <th> Cumulative EWT</th>
+                <th> Cumulative % Utilisation</th>
+                <th> Cumulative HMC Availability Hours</th>
+                <th> Cumulative % Availability</th>
+                <th> Cumulative Actual Available Working time</th>
+                <th> Cumulative % Opt Utilization</th>
+            </thead>
+
+            <tbody>
+
+
+                <script>
+                    var check_date;
+                    var check_others;
+                    var key = 1;
+
+                </script>
+
+                {% for shift in search_results %}
+
+                <script>
+                    var date = "<th>{{ shift.date.date }} </th>";
+                    if (date == check_date) {
+                        key = 0;
+                        document.write("<td colspan='2'></td>")
+                    } else {
+                        check_date = date;
+                        // document.write("<td></td><td></td>");
+                        document.write(date);
+                    }
+
+                </script>
+                <script>
+                    var a;
+                    if( {{ shift.hmc_number }} == 1) {
+                        a = {{ shift.date.BD_1 }};
+                    }
+                    else {
+                        a = {{ shift.date.BD_2 }};
+                    }
+                    a *= 100;
+                    a = Math.round(a);
+                    a /= 100;
+
+                </script>
+                <script>
+                    if (key == 0) {
+                        document.write("<td colspan='2'></td>");
+                    } else {
+                        a = "<td>" + a + " </td>";
+                        document.write(a);
+                    }
+                    // document.write("<td></td><td>Breakdown_data</td>")
+
+                </script>
+                <script>
+                    var a;
+                    if( {{ shift.hmc_number }} == 1) {
+                        a = {{ shift.date.cumulative_breakdown_monthwise_1 }};
+                    }
+                    else {
+                        a = {{ shift.date.cumulative_breakdown_monthwise_2 }};
+                    }
+                    a *= 100;
+                    a = Math.round(a);
+                    a /= 100;
+
+                </script>
+                <script>
+                    if (key == 0) {
+
+                    } else {
+                        a = "<td>" + a + " </td>";
+                        document.write(a);
+
+                    }
+                    // document.write("<td>Cumulative Breakdown</td>")
+
+                </script>
+                <script>
+                    var a;
+                    if( {{ shift.hmc_number }} == 1) {
+                        a = {{ shift.date.cumulative_percentage_availability_1 }};
+                    }
+                    else {
+                        a = {{ shift.date.cumulative_percentage_availability_2 }};
+                    }
+                    a *= 100;
+                    a = Math.round(a);
+                    a /= 100;
+
+                </script>
+                <script>
+                    if (key == 0) {
+
+                    } else {
+
+                        a = "<td>" + a + " </td>";
+                        document.write(a);
+
+                    }
+                    // document.write("<td>Cumulative Breakdown</td>")
+
+                </script>
+
+                </td>
+
+
+
+                <td> {{ shift.shift }} </td>
+                <td> {{ shift.user.first_name }} </td>
+                <td> {{shift.hmc_number}} </td>
+                <td> {{ shift.diesel_start_percentage }} </td>
+                <td> {{ shift.diesel_end_percentage }} </td>
+                <td> {{ shift.diesel_start_hours }} </td>
+                <td> {{ shift.diesel_end_hours }} </td>
+                <td> {{ shift.total_tonnage_or_boxes }} </td>
+                <td> {{ shift.cycles }} </td>
+                <td>
+                    <script>
+                        var a = {{ shift.total_idle_time }};
+                        a *= 100;
+                        a = Math.round(a);
+                        a /= 100;
+                        document.write(a);
+                        // document.write("Total Idle Time ")
+
+                    </script>
+                </td>
+                <td>
+                    <script>
+                        var a = {{ shift.ewt }};
+                        a *= 100;
+                        a = Math.round(a);
+                        a /= 100;
+                        document.write(a);
+                        // document.write("EWT ")
+
+                    </script>
+                </td>
+                <td>
+                    <script>
+                        var a = {{ shift.tonnage_per_hour }};
+                        a *= 100;
+                        a = Math.round(a);
+                        a /= 100;
+                        document.write(a);
+                        // document.write("Total Tonnage or Boxes Per Hours")
+
+                    </script>
+                </td>
+                <td>
+                    <script>
+                        var a = {{ shift.cycles_per_hour }};
+                        a *= 100;
+                        a = Math.round(a);
+                        a /= 100;
+                        document.write(a);
+                        // document.write("Cycles Per Hours")
+                    </script>
+                    <td colspan="7" class="space_before_slots"></td>
+                    <script>
+                        var a;
+                        if( {{ shift.hmc_number }} == 1) {
+                             a = {{ shift.date.H_1 }};
+                        }
+                        else {
+                            a = {{  shift.date.H_2 }};
+                        }
+                        a *= 100;
+                        a = Math.round(a);
+                        a /= 100;
+
+                    </script>
+                    <script>
+                        if (key == 0) {
+
+                        } else {
+                            a = "<td id = 'invisible'>" + a + " </td>";
+                            document.write(a);
+
+                        }
+                    </script>
+                    <script>
+                        var a;
+                        if( {{ shift.hmc_number }} == 1) {
+                            a = {{ shift.date.S_1 }};
+                        }
+                        else {
+                            a = {{ shift.date.S_2 }};
+                        }
+                        a *= 100;
+                        a = Math.round(a);
+                        a /= 100;
+
+                    </script>
+                    <script>
+                        if (key == 0) {
+
+                        } else {
+                            a = "<td id = 'invisible'>" + a + " </td>";
+                            document.write(a);
+
+                        }
+                    </script>
+                    <script>
+                        var a;
+                        if( {{ shift.hmc_number }} == 1) {
+                            a = {{ shift.date.NV_1 }};
+                        }
+                        else {
+                            a = {{ shift.date.NV_2 }};
+                        }
+                        a *= 100;
+                        a = Math.round(a);
+                        a /= 100;
+
+                    </script>
+                    <script>
+                        if (key == 0) {
+
+                        } else {
+                            a = "<td id = 'invisible'>" + a + " </td>";
+                            document.write(a);
+
+                        }
+                    </script>
+                    <script>
+                        var a;
+                        if( {{ shift.hmc_number }} == 1) {
+                            a = {{ shift.date.NB_1 }};
+                        }
+                        else {
+                            a = {{ shift.date.NB_2 }};
+                        }
+                        a *= 100;
+                        a = Math.round(a);
+                        a /= 100;
+
+                    </script>
+                    <script>
+                        if (key == 0) {
+
+                        } else {
+                            a = "<td id = 'invisible'>" + a + " </td>";
+                            document.write(a);
+
+                        }
+                    </script>
+                    <script>
+                        var a;
+                        if( {{ shift.hmc_number }} == 1) {
+                            a = {{ shift.date.NC_1 }};
+                        }
+                        else {
+                            a = {{ shift.date.NC_2 }};
+                        }
+                        a *= 100;
+                        a = Math.round(a);
+                        a /= 100;
+
+                    </script>
+                    <script>
+                        if (key == 0) {
+
+                        } else {
+                            a = "<td id = 'invisible'>" + a + " </td>";
+                            document.write(a);
+
+                        }
+                    </script>
+                    <script>
+                        var a;
+                        if( {{ shift.hmc_number }} == 1) {
+                            a = {{ shift.date.TR_1 }};
+                        }
+                        else {
+                            a = {{ shift.date.TR_2 }};
+                        }
+                            a *= 100;
+                        a = Math.round(a);
+                        a /= 100;
+
+                    </script>
+                    <script>
+                        if (key == 0) {
+
+                        } else {
+                            a = "<td id = 'invisible'>" + a + " </td>";
+                            document.write(a);
+
+                        }
+                    </script>
+                    <script>
+                        var a;
+                        if( {{ shift.hmc_number }} == 1) {
+                            a = {{ shift.date.FH_1 }};
+                        }
+                        else {
+                            a = {{ shift.date.FH_2 }};
+                        }
+                        a *= 100;
+                        a = Math.round(a);
+                        a /= 100;
+
+                    </script>
+                    <script>
+                        if (key == 0) {
+
+                        } else {
+                            a = "<td  id = 'invisible'>" + a + " </td>";
+                            document.write(a);
+
+                        }
+                    </script>
+                    <script>
+                        var a;
+                        if( {{ shift.hmc_number }} == 1) {
+                            a = {{ shift.date.RH_1 }};
+                        }
+                        else {
+                            a = {{ shift.date.RH_2 }};
+                        }
+                        a *= 100;
+                        a = Math.round(a);
+                        a /= 100;
+
+                    </script>
+                    <script>
+                        if (key == 0) {
+
+                        } else {
+                            a = "<td id = 'invisible'>" + a + " </td>";
+                            document.write(a);
+
+                        }
+                    </script>
+                    <script>
+                        var a;
+                        if( {{ shift.hmc_number }} == 1) {
+                            a = {{ shift.date.NT_1 }};
+                        }
+                        else {
+                            a = {{ shift.date.NT_2 }};
+                        }
+                        a *= 100;
+                        a = Math.round(a);
+                        a /= 100;
+
+                    </script>
+                    <script>
+                        if (key == 0) {
+
+                        } else {
+                            a = "<td id = 'invisible'>" + a + " </td>";
+                            document.write(a);
+
+                        }
+                    </script>
+                    <script>
+                        var a;
+                        if( {{ shift.hmc_number }} == 1) {
+                            a = {{ shift.date.NO_1 }};
+                        }
+                        else {
+                            a = {{ shift.date.NO_2 }};
+                        }
+                        a *= 100;
+                        a = Math.round(a);
+                        a /= 100;
+
+                    </script>
+                    <script>
+                        if (key == 0) {
+
+                        } else {
+                            a = "<td id = 'invisible'>" + a + " </td>";
+                            document.write(a);
+
+                        }
+                    </script>
+                    <script>
+                        var a;
+                        if( {{ shift.hmc_number }} == 1) {
+                            a = {{ shift.date.MISC_1 }};
+                        }
+                        else {
+                            a = {{ shift.date.MISC_2 }};
+                        }
+                        a *= 100;
+                        a = Math.round(a);
+                        a /= 100;
+
+                    </script>
+                    <script>
+                        if (key == 0) {
+
+                        } else {
+                            a = "<td id = 'invisible'>" + a + " </td>";
+                            document.write(a);
+
+                        }
+                    </script>
+                    <script>
+                        var a;
+                        if( {{ shift.hmc_number }} == 1) {
+                            a = {{ shift.date.M_1 }};
+                        }
+                        else {
+                            a = {{ shift.date.M_2 }};
+                        }
+                        a *= 100;
+                        a = Math.round(a);
+                        a /= 100;
+
+                    </script>
+                    <script>
+                        if (key == 0) {
+
+                        } else {
+                            a = "<td id = 'invisible'>" + a + " </td>";
+                            document.write(a);
+
+                        }
+                    </script>
+                    <script>
+                        var a;
+                        if( {{ shift.hmc_number }} == 1) {
+                            a = {{ shift.date.hours_available_for_the_day_1 }};
+                        }
+                        else {
+                            a = {{ shift.date.hours_available_for_the_day_2 }};
+                        }
+                        a *= 100;
+                        a = Math.round(a);
+                        a /= 100;
+
+                    </script>
+                    <script>
+                        if (key == 0) {
+
+                        } else {
+                            a = "<td id = 'invisible'>" + a + " </td>";
+                            document.write(a);
+
+                        }
+                    </script>
+                    <script>
+                        var a;
+                        if( {{ shift.hmc_number }} == 1) {
+                            a = {{ shift.date.holiday_and_off_1 }};
+                        }
+                        else {
+                            a = {{ shift.date.holiday_and_off_2 }};
+                        }
+                        a *= 100;
+                        a = Math.round(a);
+                        a /= 100;
+
+                    </script>
+                    <script>
+                        if (key == 0) {
+
+                        } else {
+                            a = "<td id = 'invisible'>" + a + " </td>";
+                            document.write(a);
+
+                        }
+                    </script>
+                    <script>
+                        var a;
+                        if( {{ shift.hmc_number }} == 1) {
+                            a = {{ shift.date.strike_1 }};
+                        }
+                        else {
+                            a = {{ shift.date.strike_2 }};
+                        }
+                        a *= 100;
+                        a = Math.round(a);
+                        a /= 100;
+
+                    </script>
+                    <script>
+                        if (key == 0) {
+
+                        } else {
+                            a = "<td id = 'invisible'>" + a + " </td>";
+                            document.write(a);
+
+                        }
+                    </script>
+                    <script>
+                        var a;
+                        if( {{ shift.hmc_number }} == 1) {
+                            a = {{ shift.date.other_1 }};
+                        }
+                        else {
+                            a = {{ shift.date.other_2 }};
+                        }
+                        a *= 100;
+                        a = Math.round(a);
+                        a /= 100;
+
+                    </script>
+                    <script>
+                        if (key == 0) {
+
+                        } else {
+                            a = "<td id = 'invisible'>" + a + " </td>";
+                            document.write(a);
+
+                        }
+                    </script>
+                    <script>
+                        var a;
+                        if( {{ shift.hmc_number }} == 1) {
+                            a = {{ shift.date.total_3_to_5_1 }};
+                        }
+                        else {
+                            a = {{ shift.date.total_3_to_5_2 }};
+                        }
+                        a *= 100;
+                        a = Math.round(a);
+                        a /= 100;
+
+                    </script>
+                    <script>
+                        if (key == 0) {
+
+                        } else {
+                            a = "<td id = 'invisible'>" + a + " </td>";
+                            document.write(a);
+
+                        }
+                    </script>
+                    <script>
+                        var a;
+                        if( {{ shift.hmc_number }} == 1) {
+                            a = {{ shift.date.hours_available_for_working_1 }};
+                        }
+                        else {
+                            a = {{ shift.date.hours_available_for_working_2 }};
+                        }
+                        a *= 100;
+                        a = Math.round(a);
+                        a /= 100;
+
+                    </script>
+                    <script>
+                        if (key == 0) {
+
+                        } else {
+                            a = "<td id = 'invisible'>" + a + " </td>";
+                            document.write(a);
+
+                        }
+                    </script>
+                    <script>
+                        var a;
+                        if( {{ shift.hmc_number }} == 1) {
+                            a = {{ shift.date.no_vessel_1 }};
+                        }
+                        else {
+                            a = {{ shift.date.no_vessel_2 }};
+                        }
+                        a *= 100;
+                        a = Math.round(a);
+                        a /= 100;
+
+                    </script>
+                    <script>
+                        if (key == 0) {
+
+                        } else {
+                            a = "<td id = 'invisible'>" + a + " </td>";
+                            document.write(a);
+
+                        }
+                    </script>
+                    <script>
+                        var a;
+                        if( {{ shift.hmc_number }} == 1) {
+                            a = {{ shift.date.no_booking_1 }};
+                        }
+                        else {
+                            a = {{ shift.date.no_booking_2 }};
+                        }
+                        a *= 100;
+                        a = Math.round(a);
+                        a /= 100;
+
+                    </script>
+                    <script>
+                        if (key == 0) {
+
+                        } else {
+                            a = "<td id = 'invisible'>" + a + " </td>";
+                            document.write(a);
+
+
+                        }
+                    </script>
+                    <script>
+                        var a;
+                        if( {{ shift.hmc_number }} == 1) {
+                            a = {{ shift.date.no_cargo_1 }};
+                        }
+                        else {
+                            a = {{ shift.date.no_cargo_2 }};
+                        }
+                        a *= 100;
+                        a = Math.round(a);
+                        a /= 100;
+
+                    </script>
+                    <script>
+                        if (key == 0) {
+
+                        } else {
+                            a = "<td id = 'invisible'>" + a + " </td>";
+                            document.write(a);
+                        }
+                    </script>
+
+
+                    <script>
+                        var a;
+                        if( {{ shift.hmc_number }} == 1) {
+                            a = {{ shift.date.others_port_users_account_1 }};
+                        }
+                        else {
+                            a = {{ shift.date.others_port_users_account_2 }};
+                        }
+                        a *= 100;
+                        a = Math.round(a);
+                        a /= 100;
+                    </script>
+                    <script>
+                        if (key == 0) {
+
+                        } else {
+                            a = "<td id = 'invisible'>" + a + " </td>";
+                            document.write(a);
+
+                        }
+                    </script>
+                    <script>
+                        var a;
+                        if( {{ shift.hmc_number }} == 1) {
+                            a = {{ shift.date.total_8_to_11_1 }};
+                        }
+                        else {
+                            a = {{ shift.date.total_8_to_11_2 }};
+                        }
+                        a *= 100;
+                        a = Math.round(a);
+                        a /= 100;
+
+                    </script>
+                    <script>
+                        if (key == 0) {
+
+                        } else {
+                            a = "<td id = 'invisible'>" + a + " </td>";
+                            document.write(a);
+
+                        }
+                    </script>
+
+                    <script>
+                        var a;
+                        if( {{ shift.hmc_number }} == 1) {
+                            a = {{ shift.date.actual_available_working_hours_1 }};
+                        }
+                        else {
+                            a = {{ shift.date.actual_available_working_hours_2 }};
+                        }
+                        a *= 100;
+                        a = Math.round(a);
+                        a /= 100;
+
+                    </script>
+                    <script>
+                        if (key == 0) {
+
+                        } else {
+                            a = "<td id = 'invisible'>" + a + " </td>";
+                            document.write(a);
+
+                        }
+                    </script>
+
+                    <script>
+                        var a;
+                        if( {{ shift.hmc_number }} == 1) {
+                            a = {{ shift.date.breakdown_repairs_1 }};
+                        }
+                        else {
+                            a = {{ shift.date.breakdown_repairs_2 }};
+                        }
+                        a *= 100;
+                        a = Math.round(a);
+                        a /= 100;
+
+                    </script>
+                    <script>
+                        if (key == 0) {
+
+                        } else {
+                            a = "<td id = 'invisible'>" + a + " </td>";
+                            document.write(a);
+
+                        }
+                    </script>
+
+                    <script>
+                        var a;
+                        if( {{ shift.hmc_number }} == 1) {
+                            a = {{ shift.date.maintenance_1 }};
+                        }
+                        else {
+                            a = {{shift.date.maintenance_2 }};
+                        }
+                        a *= 100;
+                        a = Math.round(a);
+                        a /= 100;
+
+                    </script>
+                    <script>
+                        if (key == 0) {
+
+                        } else {
+                            a = "<td id = 'invisible'>" + a + " </td>";
+                            document.write(a);
+
+                        }
+                    </script>
+
+                    <script>
+                        var a;
+                        if( {{ shift.hmc_number }} == 1) {
+                            a = {{ shift.date.total_13_to_14_1 }};
+                        }
+                        else {
+                            a = {{ shift.date.total_13_to_14_2 }};
+                        }
+                        a *= 100;
+                        a = Math.round(a);
+                        a /= 100;
+
+                    </script>
+                    <script>
+                        if (key == 0) {
+
+                        } else {
+                            a = "<td id = 'invisible'>" + a + " </td>";
+                            document.write(a);
+
+                        }
+                    </script>
+
+                    <script>
+                        var a;
+                        if( {{ shift.hmc_number }} == 1) {
+                            a = {{ shift.date.HMC_availability_hours_1 }};
+                        }
+                        else {
+                            a = {{ shift.date.HMC_availability_hours_2 }};
+                        }
+                        a *= 100;
+                        a = Math.round(a);
+                        a /= 100;
+
+                    </script>
+                    <script>
+                        if (key == 0) {
+
+                        } else {
+                            a = "<td id = 'invisible'>" + a + " </td>";
+                            document.write(a);
+
+                        }
+                    </script>
+
+                    <script>
+                        var a;
+                        if( {{ shift.hmc_number }} == 1) {
+                            a = {{ shift.date.effective_working_hours_1 }};
+                        }
+                        else {
+                            a = {{ shift.date.effective_working_hours_2 }};
+                        }
+                        a *= 100;
+                        a = Math.round(a);
+                        a /= 100;
+
+                    </script>
+                    <script>
+                        if (key == 0) {
+
+                        } else {
+                            a = "<td id = 'invisible'>" + a + " </td>";
+                            document.write(a);
+
+                        }
+                    </script>
+
+                    <script>
+                        var a;
+                        if( {{ shift.hmc_number }} == 1) {
+                            a = {{ shift.date.HMC_availability_percentage_1 }};
+                        }
+                        else {
+                            a = {{ shift.date.HMC_availability_percentage_2 }};
+                        }
+                        a *= 100;
+                        a = Math.round(a);
+                        a /= 100;
+
+                    </script>
+                    <script>
+                        if (key == 0) {
+
+                        } else {
+                            a = "<td id = 'invisible'>" + a + " </td>";
+                            document.write(a);
+
+                        }
+                    </script>
+
+                    <script>
+                        var a;
+                        if( {{ shift.hmc_number }} == 1) {
+                            a = {{ shift.date.operational_utilization_percentage_1 }};
+                        }
+                        else {
+                            a = {{ shift.date.operational_utilization_percentage_2 }};
+                        }
+                        a *= 100;
+                        a = Math.round(a);
+                        a /= 100;
+
+                    </script>
+                    <script>
+                        if (key == 0) {
+
+                        } else {
+                            a = "<td id = 'invisible'>" + a + " </td>";
+                            document.write(a);
+
+                        }
+                    </script>
+
+                    <script>
+                        var a;
+                        if( {{ shift.hmc_number }} == 1) {
+                            a = {{ shift.date.cumulative_available_hours_1 }};
+                        }
+                        else {
+                            a = {{ shift.date.cumulative_available_hours_2 }};
+                        }
+                        a *= 100;
+                        a = Math.round(a);
+                        a /= 100;
+
+                    </script>
+                    <script>
+                        if (key == 0) {
+
+                        } else {
+                            a = "<td id = 'invisible'>" + a + " </td>";
+                            document.write(a);
+
+                        }
+                    </script>
+
+                    <script>
+                        var a;
+                        if( {{ shift.hmc_number }} == 1) {
+                            a = {{ shift.date.cumulative_ewt_1 }};
+                        }
+                        else {
+                            a = {{ shift.date.cumulative_ewt_2 }};
+                        }
+                        a *= 100;
+                        a = Math.round(a);
+                        a /= 100;
+
+                    </script>
+                    <script>
+                        if (key == 0) {
+
+                        } else {
+                            a = "<td id = 'invisible'>" + a + " </td>";
+                            document.write(a);
+
+                        }
+                    </script>
+
+                    <script>
+                        var a;
+                        if( {{ shift.hmc_number }} == 1) {
+                            a = {{ shift.date.cumulative_percentage_utilization_1 }};
+                        }
+                        else {
+                            a = {{ shift.date.cumulative_percentage_utilization_2 }};
+                        }
+                        a *= 100;
+                        a = Math.round(a);
+                        a /= 100;
+
+                    </script>
+                    <script>
+                        if (key == 0) {
+
+                        } else {
+                            a = "<td id = 'invisible'>" + a + " </td>";
+                            document.write(a);
+
+                        }
+                    </script>
+
+                    <script>
+                        var a;
+                        if( {{ shift.hmc_number }} == 1) {
+                            a = {{ shift.date.cumulative_HMC_availability_hours_1 }};
+                        }
+                        else {
+                            a = {{ shift.date.cumulative_HMC_availability_hours_2 }};
+                        }
+                        a *= 100;
+                        a = Math.round(a);
+                        a /= 100;
+
+                    </script>
+                    <script>
+                        if (key == 0) {
+
+                        } else {
+                            a = "<td id = 'invisible'>" + a + " </td>";
+                            document.write(a);
+
+                        }
+                    </script>
+
+                    <script>
+                        var a;
+                        if( {{ shift.hmc_number }} == 1) {
+                            a = {{ shift.date.cumulative_percentage_availability_1 }};
+                        }
+                        else {
+                            a = {{ shift.date.cumulative_percentage_availability_2 }};
+                        }
+                        a *= 100;
+                        a = Math.round(a);
+                        a /= 100;
+
+                    </script>
+                    <script>
+                        if (key == 0) {
+
+                        } else {
+                            a = "<td id = 'invisible'>" + a + " </td>";
+                            document.write(a);
+
+                        }
+                    </script>
+
+                    <script>
+                        var a;
+                        if( {{ shift.hmc_number }} == 1) {
+                            a = {{ shift.date.cumulative_actual_available_working_time_1 }};
+                        }
+                        else {
+                            a = {{ shift.date.cumulative_actual_available_working_time_2 }};
+                        }
+                        a *= 100;
+                        a = Math.round(a);
+                        a /= 100;
+
+                    </script>
+                    <script>
+                        if (key == 0) {
+
+                        } else {
+                            a = "<td id = 'invisible'>" + a + " </td>";
+                            document.write(a);
+
+                        }
+                    </script>
+
+                    <script>
+                        var a;
+                        if( {{ shift.hmc_number }} == 1) {
+                            a = {{ shift.date.cumulative_percentage_opt_utilization_1 }};
+                        }
+                        else {
+                            a = {{ shift.date.cumulative_percentage_opt_utilization_2 }};
+                        }
+                        a *= 100;
+                        a = Math.round(a);
+                        a /= 100;
+
+                    </script>
+                    <script>
+                        if (key == 0) {
+                            key=1;
+                        } else {
+                            a = "<td id = 'invisible'>" + a + " </td>";
+                            document.write(a);
+
+                        }
+                    </script>
+
+                </td>
+                {% for slot in shift.slot_set.all %}
+
+                <tr class="slot_row">
+                    <td colspan="17" class="space_before_slots"></td>
+
+                    <td> {{ slot.get_time_slot_start }} </td>
+                    <td> {{ slot.get_time_slot_stop }} </td>
+                    <td> {{ slot.reason }} </td>
+                    <td> {{ slot.remark }} </td>
+                    <td>
+                        <script>
+                            var a = {{ slot.total_time }};
+                            a *= 100;
+                            a = Math.round(a);
+                            a /= 100;
+                            document.write(a);
+                            // document.write("Total Time ")
+
+                        </script>
+                    </td>
+
+                    {% for vessel in slot.vessel_set.all %}
+                    <td> {{ vessel.vessel_name }} </td>
+                    <td> {{ vessel.vessel_cargo }} </td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+
+
+                <tr class="blank_row">
+                    <td colspan="62"></td>
+                </tr>
+
+
+            {% endfor %}
+
+            </tbody>
+        </table>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-5 col-sm-5">
+                <button class="btn btn-default" color = "blue">Export to Excel</button>
+            </div>
+        </div>
+        {% else %}
+        <p> No data is available for given parameters. </p>
+        {% endif %}
+
+        <script>
+            function myFunction() {
+                var x = document.getElementById("topnav");
+                if (x.className === "topnav") {
+                    x.className += " responsive";
+                } else {
+                    x.className = "topnav";
+                }
+            }
+
+        </script>
+
+    </body>
+
+    </html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+{% load static %}
+<head>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{% static "mpt_login.css" %}">
+
+</head>
+<body>
+
+    <h2> Login Form </h2>
+
+    <form method = "post">
+        {% csrf_token %}
+        <div class = "imgcontainer">
+            <img src = "{% static "images/logo.jpg" %}" alt = "MPT Goa" class = "mpt_goa">
+        </div>
+
+        <div class = "container">
+            <label for = "uname"> <b> Username </b> </label>
+            {{ form.username }}
+            <br><br>
+            <label for = "psw" > <b> Password </b> </label>
+            {{ form.password }}
+            <br><br><br>
+            <button type = "submit"> Login </button>
+        </div>
+
+    </form>
+
+</body>
+</html>

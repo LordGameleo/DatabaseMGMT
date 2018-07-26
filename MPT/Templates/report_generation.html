@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+{% load static %}
+    <head>
+        <link rel="icon" href="{% static 'images/favicon.ico' %}">
+         <title>Main</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+      <link rel="stylesheet" href="{% static "bootstrap.min.css" %}" >
+       <script src="{% static "jquery-3.3.1.js" %}"></script>
+        <script src="{% static "bootstrap.min.js" %}"></script>
+        <style type="text/css">
+        body {
+            background-color:  #66CCFF;
+        }
+        .navbar-inverse {
+            margin-bottom: 0px;
+
+        }
+        h1 {
+            color: black;
+            font-style: bold;
+            text-align: center;
+        }
+
+        .navbar-inverse .navbar-nav > li > a {
+            color: #ddd;
+        }
+
+
+
+  </style>
+    </head>
+
+    <body>
+        <nav class="navbar navbar-inverse" style="font-size: 20px;">
+  <div class="container-fluid">
+    <ul  class="nav navbar-nav" style="margin-bottom: 0px; ">
+      <li style="padding-right: 15px"  ><a href="{% url 'main' %}">Home</a></li>
+       <li style="padding-right: 15px"> <a href="{% url 'search' %}">Search</a></li>
+        <li style="padding-right: 15px"><a href="{% url 'add_options' %}">Add New Data</a></li>
+        <li style="padding-right: 15px"><a href="{% url 'modify_options' %}">Modify Data</a></li>
+        <li style="padding-right: 15px"  class="active"><a href="{% url 'report_options' %}">Report Generation</a></li>
+    </ul>
+    <ul class="nav navbar-nav navbar-right">
+      <li><a href="{% url 'logout' %}"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+
+    </ul>
+  </div>
+</nav>
+
+        <h1 id="title" >Report Generation</h1>
+
+            <div class="container " style="background-color: white;">
+
+  <form class="form-horizontal" action="/main/rgen/" , method="post">
+    <div id="form" style="padding: 50px;">
+     {% csrf_token %}
+
+
+
+     <div class="form-group">
+     <label class="control-label col-sm-2" >Month :</label>
+        <div class="col-sm-8">
+            <select  type="button" class="form-control" id="dropdown" id="month_search" placeholder="Month" name="month_search" required >
+                <option value="">Month</option>
+                        <option value="1">Jan - 01</option>
+                        <option value="2">Feb - 02</option>
+                        <option value="3">Mar - 03</option>
+                        <option value="4">Apr - 04</option>
+                        <option value="5">May - 05</option>
+                        <option value="6">Jun - 06</option>
+                        <option value="7">Jul - 07</option>
+                        <option value="8">Aug - 08</option>
+                        <option value="9">Sep - 09</option>
+                        <option value="10">Oct - 10</option>
+                        <option value="11">Nov - 11</option>
+                        <option value="12">Dec - 12</option>
+
+            </select>
+      </div>
+    </div>
+    <div class = "form-group">
+       <label class="control-label col-sm-2" >Year :</label>
+       <div class="col-sm-8">
+           <input name='year_search' class="form-control" id="year_search" type="number" min="1960" max="3000" placeholder="Year" required />
+       </div>
+   </div>
+
+
+    <div class="form-group">
+      <label class="control-label col-sm-2" >Reason :</label>
+      <div class="col-sm-8">
+          <select type="button" class="form-control" id="dropdown" id="reason_search" placeholder="Reason" name="reason_search" required>
+                  <option value="">Reason</option>
+                  <option value="NC">NC - No Cargo</option>
+                  <option value="NT">NT - No Trailer</option>
+                  <option value="FH">FH - Fixing Hatch</option>
+                  <option value="NO">NO - No Operation</option>
+                  <option value="TR">TR - Travelling</option>
+                  <option value="RH">RH - Remove Hatch</option>
+                  <option value="BD">BD - Breakdown</option>
+                  <option value="MISC">MISC - Miscellaneous</option>
+                  <option value="NB">NB - No Booking</option>
+                  <option value="NV">NV - No Vessel</option>
+                  <option value="H">H - Holiday</option>
+                  <option value="S">S - Strike</option>
+                  <option value="M">M - Maintenance</option>
+
+          </select>
+    </div>
+    </div>
+
+
+    <div class = "form-group">
+        <label class="control-label col-sm-2" >HMC :</label>
+         <div class="col-sm-8">
+             <input name='hmc_search' class="form-control" id="hmc_search" type="number" min="1" max="2" placeholder="HMC" required />
+         </div>
+     </div>
+
+
+    <div class="form-group">
+      <div class="col-sm-offset-2 col-sm-8">
+        <button type="submit" class="btn btn-default">Submit</button>
+      </div>
+    </div>
+     </div>
+  </form>
+
+</div>
+
+    </body>
+
+</html>

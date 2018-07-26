@@ -1,0 +1,10 @@
+{% if search_results %}
+{% csrf_token %}
+    <ul>
+    {% for dates in search_results %}
+        <li><a href="">{{ search_results.date }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No dates are available.</p>
+{% endif %}
